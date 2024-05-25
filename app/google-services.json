@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "591723631269",
+    "project_id": "catholic-liturgy",
+    "storage_bucket": "catholic-liturgy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:591723631269:android:9c4afc3c3b79d404f8f34c",
+        "android_client_info": {
+          "package_name": "com.ronaldsantos.catholicliturgy.dev"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDerGJbH90ubnImrcgqQc7AJHoU1tGBvWc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
