@@ -9,6 +9,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.fragment.app.FragmentActivity
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ronaldsantos.catholicliturgy.app.component.SetupSystemUi
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
@@ -17,7 +18,7 @@ import com.ronaldsantos.catholicliturgy.presentation.welcome.navgraph.WelcomeNav
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class WelcomeActivity : AppCompatActivity() {
+class WelcomeActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {

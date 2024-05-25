@@ -27,8 +27,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".presentation.main.MainActivity"/>
-        <activity android:name=".presentation.welcome.WelcomeActivity"/>
+        <activity android:name=".presentation.main.MainActivity" android:theme="@style/Theme.CatholicLiturgy"/>
+        <activity android:name=".presentation.welcome.WelcomeActivity" android:theme="@style/Theme.CatholicLiturgy"/>
     </application>
 
 </manifest>

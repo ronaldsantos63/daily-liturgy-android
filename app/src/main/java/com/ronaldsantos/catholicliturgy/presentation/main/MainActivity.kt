@@ -20,6 +20,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.fragment.app.FragmentActivity
 import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.app.component.SegmentText
 import com.ronaldsantos.catholicliturgy.app.component.SegmentedControl
@@ -30,7 +31,7 @@ import com.ronaldsantos.catholicliturgy.library.framework.extension.toast
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     private var backPressed = 0L
 
     private val finish: () -> Unit = {
