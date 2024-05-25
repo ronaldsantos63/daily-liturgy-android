@@ -27,7 +27,9 @@ import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTheme
 import com.ronaldsantos.catholicliturgy.app.widget.LoadingView
 import com.ronaldsantos.catholicliturgy.library.framework.extension.toast
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private var backPressed = 0L
 

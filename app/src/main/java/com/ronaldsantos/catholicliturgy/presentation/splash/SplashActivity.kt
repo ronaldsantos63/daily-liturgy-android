@@ -15,10 +15,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.presentation.main.MainActivity
 import com.ronaldsantos.catholicliturgy.presentation.welcome.WelcomeActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
     private val viewModel by viewModels<SplashViewModel>()
 

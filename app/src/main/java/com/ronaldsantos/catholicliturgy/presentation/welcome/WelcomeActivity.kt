@@ -14,7 +14,9 @@ import com.ronaldsantos.catholicliturgy.app.component.SetupSystemUi
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTheme
 import com.ronaldsantos.catholicliturgy.presentation.welcome.navgraph.WelcomeNavGraph
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class WelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
