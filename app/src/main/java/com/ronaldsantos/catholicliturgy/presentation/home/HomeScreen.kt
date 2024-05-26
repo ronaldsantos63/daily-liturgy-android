@@ -1,7 +1,5 @@
 package com.ronaldsantos.catholicliturgy.presentation.home
 
-import androidx.annotation.StringRes
-import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -28,9 +26,12 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -67,35 +68,35 @@ fun HomeScreen(navigator: NavigationProvider) {
                 modifier = Modifier.padding(it)
             ) {
                 val tabsName = remember { HomeTabs.entries.map { tab -> tab.value } }
-                val selectedIndex = rememberSaveable { mutableStateOf(HomeTabs.FirstReading.ordinal) }
+                var selectedIndex by rememberSaveable { mutableIntStateOf(HomeTabs.FirstReading.ordinal) }
                 TabRow(
-                    selectedTabIndex = selectedIndex.value,
+                    selectedTabIndex = selectedIndex,
                     backgroundColor = CatholicLiturgyColors.primary,
                     indicator = { tabPositions ->
                         TabRowDefaults.Indicator(
                             color = RedDark,
                             height = TabRowDefaults.IndicatorHeight,
                             modifier = Modifier
-                                .tabIndicatorOffset(tabPositions[selectedIndex.value])
+                                .tabIndicatorOffset(tabPositions[selectedIndex])
                         )
                     }
                 ) {
                     tabsName.forEachIndexed { index, stringResourceId ->
                         Tab(
-                            selected = index == selectedIndex.value,
+                            selected = index == selectedIndex,
                             onClick = {
                                 when (stringResourceId) {
                                     HomeTabs.FirstReading.value -> {
-                                        selectedIndex.value = HomeTabs.FirstReading.ordinal
+                                        selectedIndex = HomeTabs.FirstReading.ordinal
                                     }
                                     HomeTabs.Psalm.value -> {
-                                        selectedIndex.value = HomeTabs.Psalm.ordinal
+                                        selectedIndex = HomeTabs.Psalm.ordinal
                                     }
                                     HomeTabs.SecondReading.value -> {
-                                        selectedIndex.value = HomeTabs.SecondReading.ordinal
+                                        selectedIndex = HomeTabs.SecondReading.ordinal
                                     }
                                     HomeTabs.Gospel.value -> {
-                                        selectedIndex.value = HomeTabs.Gospel.ordinal
+                                        selectedIndex = HomeTabs.Gospel.ordinal
                                     }
                                 }
                             },
@@ -108,7 +109,7 @@ fun HomeScreen(navigator: NavigationProvider) {
                         )
                     }
                 }
-                when (selectedIndex.value) {
+                when (selectedIndex) {
                     HomeTabs.FirstReading.ordinal -> {
 //                            CharactersPage(uiState, viewModel, padding, navigator, modifier)
                     }
