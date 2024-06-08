@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Liturgia Diária</string>
+    <string name="app_name">Daily Liturgy</string>
 
     <string name="pref_theme_light_value" translatable="false">light</string>
     <string name="pref_theme_dark_value" translatable="false">dark</string>
@@ -23,6 +23,14 @@
     <string name="text_empty">Empty</string>
     <string name="text_finish">Finish</string>
 
+    <string name="tab_daily_liturgy_first_reading">1st Reading</string>
+    <string name="tab_daily_liturgy_psalm_reading">Psalm</string>
+    <string name="tab_daily_liturgy_second_reading">2st Reading</string>
+    <string name="tab_daily_liturgy_gospel_reading">Gospel</string>
+
+    <string name="text_ok">Ok</string>
+    <string name="text_cancel">Cancel</string>
+
 
     <string name="bottom_menu_characters">Characters</string>
     <string name="bottom_menu_episodes">Episodes</string>
@@ -33,6 +41,7 @@
     <string name="toolbar_locations_title">Locations</string>
     <string name="toolbar_episodes_title">Episodes</string>
     <string name="toolbar_settings_title">Settings</string>
+    <string name="toolbar_home_title">Daily Liturgy</string>
 
 
 </resources>

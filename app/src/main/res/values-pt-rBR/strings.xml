@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Liturgia Diária</string>
+
+    <string name="common_check_internet_dialog_message">Check your internet connection!</string>
+    <string name="common_general_close">Fechar</string>
+    <string name="text_theme_mode">Troca tema</string>
+    <string name="text_rate_app">Avaliar App</string>
+    <string name="text_share_app">Compartilhar App</string>
+    <string name="text_term_and_privacy">Termos &amp; Privacidade</string>
+    <string name="text_about">Sobre</string>
+    <string name="text_app_version">Versão App</string>
+    <string name="app_exit_label">Pressional VOLTAR novamente para sair</string>
+    <string name="text_no_data_found">Nenhum dado adequado encontrado.</string>
+    <string name="text_retry">Tentar novamente</string>
+    <string name="text_error_icon">Ícone de erro</string>
+    <string name="text_empty">Vazio</string>
+    <string name="text_finish">Terminar</string>
+
+    <string name="tab_daily_liturgy_first_reading">1ª Leitura</string>
+    <string name="tab_daily_liturgy_psalm_reading">Salmo</string>
+    <string name="tab_daily_liturgy_second_reading">2ª Leitura</string>
+    <string name="tab_daily_liturgy_gospel_reading">Evangelho</string>
+
+
+    <string name="bottom_menu_characters">Personagens</string>
+    <string name="bottom_menu_episodes">Episódios</string>
+    <string name="bottom_menu_locations">Localizações</string>
+    <string name="bottom_menu_settings">Configurações</string>
+
+    <string name="toolbar_characters_title">Personagens</string>
+    <string name="toolbar_locations_title">Localizações</string>
+    <string name="toolbar_episodes_title">Episódios</string>
+    <string name="toolbar_settings_title">Configurações</string>
+    <string name="toolbar_home_title">Liturgia Diária</string>
+    <string name="text_ok">Ok</string>
+    <string name="text_cancel">Cancelar</string>
+</resources>

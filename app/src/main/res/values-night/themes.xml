@@ -2,10 +2,10 @@
 <resources>
 
     <style name="Theme.CatholicLiturgy" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:statusBarColor">#FFF</item>
+        <item name="android:statusBarColor">#252941</item>
     </style>
 
     <style name="SplashScreenTheme" parent="Theme.CatholicLiturgy">
-        <item name="android:windowBackground">@drawable/bg_splash_light</item>
+        <item name="android:windowBackground">@drawable/bg_splash_dark</item>
     </style>
 </resources>
