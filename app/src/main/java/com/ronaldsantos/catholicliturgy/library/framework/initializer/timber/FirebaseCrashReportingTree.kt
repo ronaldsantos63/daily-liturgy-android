@@ -17,6 +17,7 @@ class FirebaseCrashReportingTree(private val context: Context) : Timber.Tree() {
             with(Firebase.crashlytics) {
                  setCustomKey("DEVICE_ID", context.deviceId())
                 if (t != null) {
+                    log("$tag - $message")
                     recordException(t)
                 }
             }

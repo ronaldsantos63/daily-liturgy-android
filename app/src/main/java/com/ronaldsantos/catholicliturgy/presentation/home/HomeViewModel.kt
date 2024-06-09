@@ -1,6 +1,5 @@
 package com.ronaldsantos.catholicliturgy.presentation.home
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,7 +9,6 @@ import com.ronaldsantos.catholicliturgy.library.framework.base.BaseViewState
 import com.ronaldsantos.catholicliturgy.library.framework.base.MviViewModel
 import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBrl
 import com.ronaldsantos.catholicliturgy.provider.theme.ThemeProvider
-import com.ronaldsantos.catholicliturgy.provider.theme.shouldUseDarkMode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -67,7 +65,6 @@ class HomeViewModel @Inject constructor(
         getCurrentDailyLiturgy.invoke(
             GetCurrentDailyLiturgy.Params(period = period ?: date.asDateStringBrl)
         ).onEach { dailyLiturgyDto ->
-            Log.d(TAG, "onLoadDailyLiturgy: $dailyLiturgyDto")
             val tabs = dailyLiturgyDto.readings.map {
                 HomeTabs.parseType(it.type)
             }
@@ -81,8 +78,7 @@ class HomeViewModel @Inject constructor(
                 )
             )
         }.catch {
-            it.printStackTrace()
-            Log.d(TAG, "Error onLoadDailyLiturgy: $it")
+            Timber.tag(TAG).e(it, "Error loading daily liturgy")
             setState(BaseViewState.Error(it))
         }.launchIn(viewModelScope)
     }
