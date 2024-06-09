@@ -53,10 +53,17 @@ object NetworkModule {
     fun providesCatholicLiturgyApi(
         client: OkHttpClient,
         configuration: Configuration,
-    ): CatholicLiturgyApi = Retrofit.Builder()
-        .baseUrl(configuration.networkConfig().baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .client(client)
-        .build()
+    ): CatholicLiturgyApi = createRetrofit(client, configuration)
         .create(CatholicLiturgyApi::class.java)
+
+    private fun createRetrofit(
+        client: OkHttpClient,
+        configuration: Configuration,
+    ): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(configuration.networkConfig().baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+    }
 }

@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
@@ -19,7 +22,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -27,12 +29,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.HorizontalPagerIndicator
-import com.google.accompanist.pager.PagerState
-import com.google.accompanist.pager.rememberPagerState
 import com.ronaldsantos.catholicliturgy.R
+import com.ronaldsantos.catholicliturgy.app.component.pager.HorizontalPagerIndicator
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTheme
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTypography
@@ -42,7 +40,7 @@ import com.ronaldsantos.catholicliturgy.library.framework.extension.launchActivi
 import com.ronaldsantos.catholicliturgy.presentation.main.MainActivity
 
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnBoardingScreen(viewModel: OnBoardingViewModel = hiltViewModel()) {
     val context = LocalContext.current
@@ -51,7 +49,9 @@ fun OnBoardingScreen(viewModel: OnBoardingViewModel = hiltViewModel()) {
         OnBoardingPage.Second,
         OnBoardingPage.Third
     )
-    val pagerState = rememberPagerState()
+    val pagerState = rememberPagerState {
+        pages.count()
+    }
 
     Column(
         modifier = Modifier
@@ -61,7 +61,6 @@ fun OnBoardingScreen(viewModel: OnBoardingViewModel = hiltViewModel()) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
             state = pagerState,
-            count = pages.count(),
             verticalAlignment = Alignment.Top
         ) { position ->
             PagerScreen(onBoardingPage = pages[position])
@@ -71,8 +70,17 @@ fun OnBoardingScreen(viewModel: OnBoardingViewModel = hiltViewModel()) {
                 .align(Alignment.CenterHorizontally)
                 .weight(1f),
             pagerState = pagerState,
+            pageCount = pages.count(),
             activeColor = Red700
         )
+//        HorizontalPager(
+//            modifier = Modifier.weight(10f),
+//            state = pagerState,
+//            count = pages.count(),
+//            verticalAlignment = Alignment.Top
+//        ) { position ->
+//            PagerScreen(onBoardingPage = pages[position])
+//        }
         FinishButton(
             modifier = Modifier.weight(1f),
             pagerState = pagerState
@@ -119,7 +127,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun FinishButton(
     modifier: Modifier,

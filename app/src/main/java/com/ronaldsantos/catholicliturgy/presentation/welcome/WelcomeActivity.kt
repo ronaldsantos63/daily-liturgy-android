@@ -1,14 +1,11 @@
 package com.ronaldsantos.catholicliturgy.presentation.welcome
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.fragment.app.FragmentActivity
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.ronaldsantos.catholicliturgy.app.component.SetupSystemUi
@@ -21,10 +18,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class WelcomeActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val splashScreen = installSplashScreen()
-            splashScreen.setKeepOnScreenCondition { true }
-        }
         super.onCreate(savedInstanceState)
         setContent {
             WelcomeRoot()

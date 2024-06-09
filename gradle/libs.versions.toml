@@ -22,8 +22,7 @@ okhttp3 = "4.11.0"
 coil = "2.4.0"
 datastorePreferences = "1.1.1"
 composeFoundation = "1.6.6"
-paging = "3.2.1"
-pagingCompose = "3.2.1"
+paging = "3.3.0"
 room = "2.6.1"
 ksp = "1.9.22-1.0.17"
 googleServices = "4.4.1"
@@ -97,12 +96,13 @@ destinationAnimation = { module = "io.github.raamcosta.compose-destinations:anim
 # Request Permission Compose
 com-google-accompanist-permissions = { group = "com.google.accompanist", name = "accompanist-permissions", version.ref = "accompanist" }
 com-google-accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
-com-google-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
 com-google-accompanist-systemuicontroller = { group = "com.google.accompanist", name = "accompanist-systemuicontroller", version.ref = "accompanist" }
-com-google-accompanist-navigation-material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
-com-google-accompanist-pagerIndicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 com-google-accompanist-placeholderMaterial = { module = "com.google.accompanist:accompanist-placeholder-material", version.ref = "accompanist" }
 com-google-accompanist-SwipeRefresh = { module = "com.google.accompanist:accompanist-swiperefresh", version.ref = "accompanist" }
+# Não Usar essas dependências
+com-google-accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanist" }
+com-google-accompanist-navigation-material = { module = "com.google.accompanist:accompanist-navigation-material", version.ref = "accompanist" }
+com-google-accompanist-pagerIndicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanist" }
 
 # Hilt
 com-google-dagger-hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
@@ -128,7 +128,7 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 
 # Paging 3
 androidx-paging-runtime = { group = "androidx.paging", name = "paging-runtime", version.ref = "paging" }
-androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "pagingCompose" }
+androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", version.ref = "paging" }
 
 # Room Database
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
@@ -186,7 +186,8 @@ core = [
     "material",
     "androidx-activity",
     "androidx-compose-material-icons-core",
-    "lottie"
+    "lottie",
+    "androidx-compose-foundation"
 ]
 
 navigation = [
@@ -198,10 +199,10 @@ navigation = [
 accompanist = [
     "com-google-accompanist-permissions",
     "com-google-accompanist-insets",
-    "com-google-accompanist-pager",
+#    "com-google-accompanist-pager",
     "com-google-accompanist-systemuicontroller",
-    "com-google-accompanist-navigation-material",
-    "com-google-accompanist-pagerIndicators",
+#    "com-google-accompanist-navigation-material",
+#    "com-google-accompanist-pagerIndicators",
     "com-google-accompanist-placeholderMaterial",
     "com-google-accompanist-SwipeRefresh"
 ]

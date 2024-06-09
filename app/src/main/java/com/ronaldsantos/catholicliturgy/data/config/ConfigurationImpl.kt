@@ -4,17 +4,18 @@ import android.content.Context
 import android.content.pm.ApplicationInfo
 import com.ronaldsantos.catholicliturgy.data.model.config.NetworkConfig
 import com.ronaldsantos.catholicliturgy.domain.config.Configuration
+import com.ronaldsantos.catholicliturgy.library.framework.extension.isEmulator
 
 class ConfigurationImpl(private val context: Context) : Configuration {
     private fun provideNetworkConfigDebug() = NetworkConfig(
-        baseUrl = "localhost:5000",
+        baseUrl = if (isEmulator()) "http://10.0.2.2:5000" else "http://192.168.18.178:5000",
         readTimeout = 30L,
         writeTimeout = 30L,
         connectTimeout = 30L
     )
 
     private fun provideNetworkConfigRelease() = NetworkConfig(
-        baseUrl = "catholicapi.ronaldsantos.com",
+        baseUrl = "https://catholicapi.ronaldsantos.com",
         readTimeout = 10L,
         writeTimeout = 10L,
         connectTimeout = 10L

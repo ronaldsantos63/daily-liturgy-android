@@ -21,4 +21,7 @@ interface DailyLiturgyDao : BaseDao<DailyLiturgyEntity> {
 
     @Query("DELETE FROM ${DailyLiturgyEntity.TABLE_NAME} WHERE liturgy_date = :date")
     suspend fun deleteLiturgyByDate(date: String)
+
+    @Query("DELETE FROM ${DailyLiturgyEntity.TABLE_NAME} WHERE id = :id")
+    suspend fun deleteLiturgyById(id: Int)
 }

@@ -7,13 +7,13 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = DailyLiturgyEntity.TABLE_NAME)
 data class DailyLiturgyEntity(
-    @PrimaryKey
-    @ColumnInfo(name = COLUMN_ID) val id: Int,
-    @ColumnInfo(name = COLUMN_ENTRY_TITLE) val entryTitle: String,
-    @ColumnInfo(name = COLUMN_LITURGY_DATE) val liturgyDate: String,
-    @ColumnInfo(name = COLUMN_COLOR) val color: String,
-    @Embedded(prefix = PREF_READING) val readings: ReadingsEntity,
-    @ColumnInfo(name = COLUMN_CREATED) val created: String,
+    @PrimaryKey(autoGenerate = true)
+    @ColumnInfo(name = COLUMN_ID) val id: Long? = null,
+    @ColumnInfo(name = COLUMN_ENTRY_TITLE) val entryTitle: String = "",
+    @ColumnInfo(name = COLUMN_LITURGY_DATE) val liturgyDate: String = "",
+    @ColumnInfo(name = COLUMN_COLOR) val color: String = "",
+    @ColumnInfo(name = PREF_READING) val readings: List<ReadingsEntity> = emptyList(),
+    @ColumnInfo(name = COLUMN_CREATED) val created: String = "",
 ) {
     companion object {
         const val TABLE_NAME = "daily_liturgy"

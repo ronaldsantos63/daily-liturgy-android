@@ -1,10 +1,10 @@
 package com.ronaldsantos.catholicliturgy.domain.model
 
+import com.ronaldsantos.catholicliturgy.library.framework.extension.empty
+
 data class DailyLiturgyDto(
-    val id: Int,
-    val entryTitle: String,
-    val liturgyDate: String,
-    val color: String,
-    val readings: ReadingsDto,
-    val created: String,
+    val entryTitle: String = String.empty,
+    val liturgyDate: String = String.empty,
+    val color: String = String.empty,
+    val readings: List<ReadingsDto> = listOf(),
 )

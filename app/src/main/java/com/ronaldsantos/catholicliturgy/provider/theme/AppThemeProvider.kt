@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 
-class AppThemeProvider constructor(private val context: Context) : ThemeProvider {
+class AppThemeProvider(
+    private val context: Context
+) : ThemeProvider {
     private val sharedPreferences = context.getPrefs()
 
     private val defaultThemeValue = context.getString(R.string.pref_theme_default_value)
@@ -42,9 +44,15 @@ class AppThemeProvider constructor(private val context: Context) : ThemeProvider
     override fun observeTheme(): Flow<ThemeProvider.Theme> {
         return preferenceKeyChangedFlow
             // Emit on start so that we always send the initial value
-            .onStart { emit(KEY_THEME) }
-            .filter { it == KEY_THEME }
-            .map { theme }
+            .onStart {
+                emit(KEY_THEME)
+            }
+            .filter {
+                it == KEY_THEME
+            }
+            .map {
+                theme
+            }
             .distinctUntilChanged()
     }
 

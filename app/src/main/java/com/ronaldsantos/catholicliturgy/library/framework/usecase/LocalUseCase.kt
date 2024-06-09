@@ -5,6 +5,9 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 
+/**
+ * To use case that doesn't params, set params to Unit
+ */
 abstract class LocalUseCase<in Params, ReturnType> where ReturnType : Any {
 
     protected abstract suspend fun FlowCollector<ReturnType>.execute(params: Params)

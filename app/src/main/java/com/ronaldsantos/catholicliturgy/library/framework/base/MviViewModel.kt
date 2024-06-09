@@ -2,6 +2,7 @@ package com.ronaldsantos.catholicliturgy.library.framework.base
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 
 abstract class MviViewModel<STATE : BaseViewState<*>, EVENT> : MvvmViewModel() {
 
@@ -10,8 +11,8 @@ abstract class MviViewModel<STATE : BaseViewState<*>, EVENT> : MvvmViewModel() {
 
     abstract fun onTriggerEvent(eventType: EVENT)
 
-    protected fun setState(state: STATE) = safeLaunch {
-        _uiState.emit(state)
+    protected fun setState(state: STATE) = _uiState.update {
+        state
     }
 
     override fun startLoading() {

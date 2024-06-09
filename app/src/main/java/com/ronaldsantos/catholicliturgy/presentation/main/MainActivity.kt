@@ -1,7 +1,6 @@
 package com.ronaldsantos.catholicliturgy.presentation.main
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
@@ -9,7 +8,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.FragmentActivity
@@ -26,12 +25,16 @@ import com.ronaldsantos.catholicliturgy.app.component.SegmentText
 import com.ronaldsantos.catholicliturgy.app.component.SegmentedControl
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTheme
-import com.ronaldsantos.catholicliturgy.app.widget.LoadingView
 import com.ronaldsantos.catholicliturgy.library.framework.extension.toast
+import com.ronaldsantos.catholicliturgy.provider.language.LanguageProvider
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : FragmentActivity() {
+    @Inject
+    lateinit var languageProvider: LanguageProvider
+
     private var backPressed = 0L
 
     private val finish: () -> Unit = {
@@ -47,11 +50,8 @@ class MainActivity : FragmentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            CatholicLiturgyTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    LoadingView(modifier = Modifier.fillMaxSize().padding(innerPadding))
-                }
-            }
+            languageProvider.setLocale(languageProvider.getLanguageCode(), LocalContext.current)
+            MainRoot(finish = finish)
         }
     }
 }
@@ -67,7 +67,6 @@ fun SegmentedDemo() {
             fourSegments,
             selectedTwoSegment,
             onSegmentSelected = { selectedTwoSegment = it },
-            // modifier = Modifier.background(JetRortyColors, JetRortyShapes.medium)
         ) {
             SegmentText(it)
         }

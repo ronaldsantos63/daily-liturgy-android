@@ -9,21 +9,21 @@ sealed class OnBoardingPage(
     val title: String,
     val description: String
 ) {
-    object First : OnBoardingPage(
+    data object First : OnBoardingPage(
         image = R.drawable.intro_1,
-        title = "Characters",
-        description = "You can access the list of characters and details."
+        title = "Leituras",
+        description = "Tenha acesso as leituras diárias"
     )
 
-    object Second : OnBoardingPage(
+    data object Second : OnBoardingPage(
         image = R.drawable.intro_2,
-        title = "Episodes",
-        description = "You can access the list of episodes and details."
+        title = "Salmos",
+        description = "Além das leituras, você pode acessar os salmos"
     )
 
-    object Third : OnBoardingPage(
+    data object Third : OnBoardingPage(
         image = R.drawable.intro_3,
-        title = "Locations",
-        description = "You can access the list of locations and details."
+        title = "Evangelho",
+        description = "Tudo em um único lugar, incluindo o evangelho do dia"
     )
 }
