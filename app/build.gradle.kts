@@ -28,8 +28,8 @@ android {
         applicationId = "com.ronaldsantos.catholicliturgy"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 1001
+        versionName = "1.0.1"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -64,11 +64,14 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            resValue("string", "build_variant", "release")
         }
 
         create("releaseLog") {
             initWith(buildTypes.getByName("release"))
             isDebuggable = true
+            resValue("string", "build_variant", "releaseLog")
         }
 
         debug {
@@ -76,6 +79,7 @@ android {
             enableUnitTestCoverage = false
             enableAndroidTestCoverage = false
             isDebuggable = true
+            resValue("string", "build_variant", "debug")
         }
     }
     compileOptions {

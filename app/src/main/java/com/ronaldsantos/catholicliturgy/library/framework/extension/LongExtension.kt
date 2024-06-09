@@ -1,11 +1,11 @@
 package com.ronaldsantos.catholicliturgy.library.framework.extension
 
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import androidx.compose.material3.CalendarLocale
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.formatWithSkeleton
 
+@OptIn(ExperimentalMaterial3Api::class)
 val Long.asDateString: String
     get() {
-        val formatter = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
-        return formatter.format(Date(this))
+        return formatWithSkeleton(this, "dd/MM/yyyy", CalendarLocale.getDefault(), mutableMapOf())
     }

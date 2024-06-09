@@ -73,14 +73,6 @@ fun OnBoardingScreen(viewModel: OnBoardingViewModel = hiltViewModel()) {
             pageCount = pages.count(),
             activeColor = Red700
         )
-//        HorizontalPager(
-//            modifier = Modifier.weight(10f),
-//            state = pagerState,
-//            count = pages.count(),
-//            verticalAlignment = Alignment.Top
-//        ) { position ->
-//            PagerScreen(onBoardingPage = pages[position])
-//        }
         FinishButton(
             modifier = Modifier.weight(1f),
             pagerState = pagerState
@@ -109,7 +101,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
         Text(
             modifier = Modifier
                 .fillMaxWidth(),
-            text = onBoardingPage.title,
+            text = stringResource(id = onBoardingPage.title),
             fontSize = CatholicLiturgyTypography.displayMedium.fontSize,
             fontWeight = FontWeight.Bold,
             textAlign = TextAlign.Center
@@ -119,7 +111,7 @@ fun PagerScreen(onBoardingPage: OnBoardingPage) {
                 .fillMaxWidth()
                 .padding(horizontal = 40.dp)
                 .padding(top = 20.dp),
-            text = onBoardingPage.description,
+            text = stringResource(id = onBoardingPage.description),
             fontSize = CatholicLiturgyTypography.headlineMedium.fontSize,
             fontWeight = FontWeight.Medium,
             textAlign = TextAlign.Center

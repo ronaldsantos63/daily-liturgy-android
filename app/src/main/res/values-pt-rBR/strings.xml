@@ -22,17 +22,13 @@
     <string name="tab_daily_liturgy_second_reading">2ª Leitura</string>
     <string name="tab_daily_liturgy_gospel_reading">Evangelho</string>
 
-
-    <string name="bottom_menu_characters">Personagens</string>
-    <string name="bottom_menu_episodes">Episódios</string>
-    <string name="bottom_menu_locations">Localizações</string>
-    <string name="bottom_menu_settings">Configurações</string>
-
-    <string name="toolbar_characters_title">Personagens</string>
-    <string name="toolbar_locations_title">Localizações</string>
-    <string name="toolbar_episodes_title">Episódios</string>
-    <string name="toolbar_settings_title">Configurações</string>
     <string name="toolbar_home_title">Liturgia Diária</string>
     <string name="text_ok">Ok</string>
     <string name="text_cancel">Cancelar</string>
+    <string name="first_onboarding_title">Leituras</string>
+    <string name="first_onboarding_description">Tenha acesso as leituras diárias</string>
+    <string name="second_onboarding_title">Salmos</string>
+    <string name="second_onboarding_description">Além das leituras, você pode acessar os salmos</string>
+    <string name="third_onboarding_title">Evangelho</string>
+    <string name="third_onboarding_description">Tudo em um único lugar, incluindo o evangelho do dia</string>
 </resources>

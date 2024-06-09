@@ -2,6 +2,7 @@ package com.ronaldsantos.catholicliturgy.data.config
 
 import android.content.Context
 import android.content.pm.ApplicationInfo
+import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.data.model.config.NetworkConfig
 import com.ronaldsantos.catholicliturgy.domain.config.Configuration
 import com.ronaldsantos.catholicliturgy.library.framework.extension.isEmulator
@@ -22,7 +23,8 @@ class ConfigurationImpl(private val context: Context) : Configuration {
     )
 
     override fun isDebug(): Boolean {
-        return context.applicationInfo.flags and ApplicationInfo.FLAG_DEBUGGABLE != 0
+        val flags = context.applicationInfo.flags
+        return flags and ApplicationInfo.FLAG_DEBUGGABLE != 0 && isDebugVariant()
     }
 
     override fun networkConfig(): NetworkConfig = if (isDebug()) {
@@ -33,5 +35,22 @@ class ConfigurationImpl(private val context: Context) : Configuration {
 
     override fun databaseName(): String {
         return "dailyLiturgyDb"
+    }
+
+    override fun shouldShowLog(): Boolean {
+        return isDebug() || isReleaseLogVariant()
+    }
+
+    private fun isDebugVariant(): Boolean {
+        return context.getString(R.string.build_variant) == BUILD_VARIANT_DEBUG
+    }
+
+    private fun isReleaseLogVariant(): Boolean {
+        return context.getString(R.string.build_variant) == BUILD_VARIANT_RELEASE_LOG
+    }
+
+    private companion object {
+        const val BUILD_VARIANT_DEBUG = "debug"
+        const val BUILD_VARIANT_RELEASE_LOG = "releaseLog"
     }
 }

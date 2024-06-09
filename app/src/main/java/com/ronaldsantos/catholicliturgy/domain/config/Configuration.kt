@@ -6,4 +6,5 @@ interface Configuration {
     fun isDebug(): Boolean
     fun networkConfig(): NetworkConfig
     fun databaseName(): String
+    fun shouldShowLog(): Boolean
 }

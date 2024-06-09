@@ -13,7 +13,7 @@ class TimberInitializer @Inject constructor(
     private val configuration: Configuration
 ) : AppInitializer {
     override fun init(application: CoreApplication) {
-        if (configuration.isDebug()) {
+        if (configuration.shouldShowLog()) {
             Timber.plant(Timber.DebugTree())
         } else {
             Timber.plant(FirebaseCrashReportingTree(context))

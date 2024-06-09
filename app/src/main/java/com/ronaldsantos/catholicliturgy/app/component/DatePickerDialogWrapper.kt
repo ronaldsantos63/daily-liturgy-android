@@ -9,6 +9,7 @@ import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
@@ -23,6 +24,14 @@ fun DatePickerDialogWrapper(
     onDateSelected: (String) -> Unit,
     onDismiss: () -> Unit
 ) {
+    val dateFormatter = remember {
+        DatePickerDefaults.dateFormatter(
+            yearSelectionSkeleton = "yMMMM",
+            selectedDateSkeleton = "dd/MM/yyyy",
+            selectedDateDescriptionSkeleton = "dd/MM/yyyy"
+        )
+    }
+
     val datePickerState = rememberDatePickerState(
         selectableDates = object : SelectableDates {
             override fun isSelectableDate(utcTimeMillis: Long): Boolean {
@@ -58,6 +67,7 @@ fun DatePickerDialogWrapper(
     ) {
         DatePicker(
             state = datePickerState,
+            dateFormatter = dateFormatter,
             colors = DatePickerDefaults.colors(
                 selectedDayContainerColor = CatholicLiturgyColors.onSurfaceVariant,
                 selectedDayContentColor = CatholicLiturgyColors.primary,
