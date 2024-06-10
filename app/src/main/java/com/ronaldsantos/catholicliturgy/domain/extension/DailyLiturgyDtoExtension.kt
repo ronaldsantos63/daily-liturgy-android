@@ -8,10 +8,8 @@ import com.ronaldsantos.catholicliturgy.data.model.remote.response.Reading
 import com.ronaldsantos.catholicliturgy.domain.model.DailyLiturgyDto
 import com.ronaldsantos.catholicliturgy.domain.model.ReadingTypeDto
 import com.ronaldsantos.catholicliturgy.domain.model.ReadingsDto
-import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBrl
-import java.text.SimpleDateFormat
+import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBR
 import java.util.Calendar
-import java.util.Locale
 
 val Reading.asDto: List<ReadingsDto>
     get() {
@@ -83,7 +81,7 @@ val DailyLiturgyDto.asEntity: DailyLiturgyEntity
             liturgyDate = liturgyDate,
             color = color,
             readings = readings.map { it.asEntity },
-            created = Calendar.getInstance().time.asDateStringBrl
+            created = Calendar.getInstance().time.asDateStringBR
         )
     }
 

@@ -7,7 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.ronaldsantos.catholicliturgy.domain.useCase.dailyLiturgy.GetCurrentDailyLiturgy
 import com.ronaldsantos.catholicliturgy.library.framework.base.BaseViewState
 import com.ronaldsantos.catholicliturgy.library.framework.base.MviViewModel
-import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBrl
+import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBR
 import com.ronaldsantos.catholicliturgy.provider.theme.ThemeProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -63,7 +63,7 @@ class HomeViewModel @Inject constructor(
         val date = Calendar.getInstance().time
 
         getCurrentDailyLiturgy.invoke(
-            GetCurrentDailyLiturgy.Params(period = period ?: date.asDateStringBrl)
+            GetCurrentDailyLiturgy.Params(period = period ?: date.asDateStringBR)
         ).onEach { dailyLiturgyDto ->
             val tabs = dailyLiturgyDto.readings.map {
                 HomeTabs.parseType(it.type)

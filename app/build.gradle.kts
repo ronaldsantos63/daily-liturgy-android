@@ -28,8 +28,8 @@ android {
         applicationId = "com.ronaldsantos.catholicliturgy"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1002
-        versionName = "1.0.2"
+        versionCode = 1003
+        versionName = "1.0.3"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

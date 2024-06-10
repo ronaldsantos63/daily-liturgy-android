@@ -13,7 +13,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
-import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateString
+import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBR
 import java.util.Calendar
 
 private const val daysAHead = 6
@@ -47,7 +47,7 @@ fun DatePickerDialogWrapper(
         },
     )
 
-    val selectedDates: String = datePickerState.selectedDateMillis?.asDateString.orEmpty()
+    val selectedDates: String = datePickerState.selectedDateMillis?.asDateStringBR.orEmpty()
 
     DatePickerDialog(
         onDismissRequest = onDismiss,

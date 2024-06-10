@@ -7,6 +7,7 @@ import com.ronaldsantos.catholicliturgy.domain.model.DailyLiturgyDto
 import com.ronaldsantos.catholicliturgy.domain.repository.DailyLiturgyRepository
 import com.ronaldsantos.catholicliturgy.library.framework.usecase.LocalUseCase
 import kotlinx.coroutines.flow.FlowCollector
+import timber.log.Timber
 import javax.inject.Inject
 
 class GetCurrentDailyLiturgy @Inject constructor(
@@ -18,6 +19,7 @@ class GetCurrentDailyLiturgy @Inject constructor(
     )
 
     override suspend fun FlowCollector<DailyLiturgyDto>.execute(params: Params) {
+        Timber.tag(TAG).d("searching liturgy by period: ${params.period}")
         val entity = repository.getDailyLiturgyLocalByDate(params.period)
         if (entity != null) {
             emit(entity.asDto)
@@ -27,5 +29,9 @@ class GetCurrentDailyLiturgy @Inject constructor(
         val dto = response.asDto
         repository.saveDailyLiturgy(dto.asEntity)
         emit(response.asDto)
+    }
+
+    private companion object {
+        const val TAG = "GetCurrentDailyLiturgy"
     }
 }
