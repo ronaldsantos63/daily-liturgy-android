@@ -1,6 +1,5 @@
 package com.ronaldsantos.catholicliturgy.app
 
-import android.app.Application
 import com.ronaldsantos.catholicliturgy.library.framework.app.AppInitializer
 import com.ronaldsantos.catholicliturgy.library.framework.app.CoreApplication
 import dagger.hilt.android.HiltAndroidApp

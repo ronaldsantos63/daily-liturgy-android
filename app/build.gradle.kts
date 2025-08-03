@@ -22,14 +22,14 @@ if (file("agconnect-services.json").exists()) {
 
 android {
     namespace = "com.ronaldsantos.catholicliturgy"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.ronaldsantos.catholicliturgy"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1003
-        versionName = "1.0.3"
+        targetSdk = 36
+        versionCode = 1004
+        versionName = "1.0.4"
         multiDexEnabled = true
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

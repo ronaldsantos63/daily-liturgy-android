@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.singleOrNull
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 interface ThemeProvider {
     var theme: Theme
@@ -27,13 +28,17 @@ interface ThemeProvider {
 
 @Composable
 fun ThemeProvider.shouldUseDarkMode(): Boolean {
-//    val themePreference = observeTheme().collectAsState(initial = ThemeProvider.Theme.SYSTEM)
-    val themePreference = observeTheme().collectAsState(initial = ThemeProvider.Theme.SYSTEM)
+    Timber.tag("ThemeProvider.shouldUseDarkMode").d("Checking if dark mode should be used")
+    val themePreference = observeTheme().collectAsState(initial = theme)
+    Timber.tag("ThemeProvider.shouldUseDarkMode").d("Current theme preference: ${themePreference.value}")
     val mode = when (themePreference.value) {
         ThemeProvider.Theme.LIGHT -> false
         ThemeProvider.Theme.DARK -> true
         else -> isSystemInDarkTheme()
     }
-    setNightMode(mode)
+    val currentMode = isNightMode()
+    if (currentMode != mode) {
+        setNightMode(mode)
+    }
     return mode
 }
