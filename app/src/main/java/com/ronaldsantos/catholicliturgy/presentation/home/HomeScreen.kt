@@ -72,6 +72,7 @@ import timber.log.Timber
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
+    @Suppress("Unused")
     navigator: NavigationProvider,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
@@ -119,7 +120,6 @@ fun HomeScreen(
                     uiState = uiState,
                     viewModel = viewModel,
                     paddingValues = paddingValues,
-                    navigator = navigator,
                     coroutineScope = coroutineScope,
                     modifier = modifier
                 )
@@ -298,7 +298,6 @@ private fun HomePage(
     uiState: BaseViewState<*>,
     viewModel: HomeViewModel,
     paddingValues: PaddingValues,
-    navigator: NavigationProvider,
     coroutineScope: CoroutineScope,
     modifier: Modifier
 ) {

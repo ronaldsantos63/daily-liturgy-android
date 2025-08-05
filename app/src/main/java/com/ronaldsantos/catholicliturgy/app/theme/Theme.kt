@@ -119,6 +119,7 @@ val CatholicLiturgyTypography: Typography
     @Composable
     get() = MaterialTheme.typography
 
+@Suppress("unused")
 val CatholicLiturgyShapes: Shapes
     @Composable
     get() = MaterialTheme.shapes

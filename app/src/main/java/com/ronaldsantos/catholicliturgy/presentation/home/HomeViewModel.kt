@@ -59,7 +59,6 @@ class HomeViewModel @Inject constructor(
                     Timber.tag(TAG).w("Theme animation is not idle, skipping toggle")
                     return
                 }
-                val newMode = themeProvider.theme != ThemeProvider.Theme.DARK
                 onChangeThemeMode()
             }
         }
