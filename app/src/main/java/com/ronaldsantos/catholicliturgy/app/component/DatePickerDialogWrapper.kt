@@ -69,11 +69,11 @@ fun DatePickerDialogWrapper(
             state = datePickerState,
             dateFormatter = dateFormatter,
             colors = DatePickerDefaults.colors(
-                selectedDayContainerColor = CatholicLiturgyColors.onSurfaceVariant,
-                selectedDayContentColor = CatholicLiturgyColors.primary,
-                disabledDayContentColor = CatholicLiturgyColors.onPrimary.copy(
-                    alpha = 0.38f
-                )
+                selectedDayContainerColor = CatholicLiturgyColors.onSurfaceVariant, // Cor de fundo do dia selecionado
+                selectedDayContentColor = CatholicLiturgyColors.primary, // Cor do texto do dia selecionado
+                disabledDayContentColor =  CatholicLiturgyColors.onPrimary.copy(alpha = 0.38f), // Cor do texto dos dias desabilitados
+                todayDateBorderColor = CatholicLiturgyColors.onPrimary, // Cor da borda do dia atual
+                todayContentColor = CatholicLiturgyColors.onSecondary,
             ),
         )
     }
