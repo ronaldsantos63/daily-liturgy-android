@@ -3,7 +3,9 @@ package com.ronaldsantos.catholicliturgy.presentation.home
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.viewModelScope
+import com.ronaldsantos.catholicliturgy.app.theme.ThemeAnimationPhase
 import com.ronaldsantos.catholicliturgy.domain.useCase.dailyLiturgy.GetCurrentDailyLiturgy
 import com.ronaldsantos.catholicliturgy.library.framework.base.BaseViewState
 import com.ronaldsantos.catholicliturgy.library.framework.base.MviViewModel
@@ -27,11 +29,17 @@ class HomeViewModel @Inject constructor(
     private val themeProvider: ThemeProvider,
 ) : MviViewModel<BaseViewState<HomeViewState>, HomeEvent>() {
     private var lastPeriodSearched by mutableStateOf("")
+
     val isDarkMode: StateFlow<Boolean>
         get() = themeProvider
             .observeTheme()
             .map { theme ->
-                theme == ThemeProvider.Theme.DARK
+                Timber.tag(TAG).d("Checking dark mode for theme: $theme")
+                when (theme) {
+                    ThemeProvider.Theme.LIGHT -> false
+                    ThemeProvider.Theme.DARK -> true
+                    ThemeProvider.Theme.SYSTEM -> themeProvider.isSystemInDarkTheme()
+                }
             }
             .stateIn(viewModelScope, SharingStarted.Eagerly, false)
 
@@ -46,9 +54,20 @@ class HomeViewModel @Inject constructor(
                 isRefreshing = false,
                 period = lastPeriodSearched
             )
-
-            is HomeEvent.ThemeMode -> onChangeThemeMode(eventType.isDarkMode)
+            is HomeEvent.ToggleThemeMode -> {
+                if (themeProvider.themeAnimationPhase != ThemeAnimationPhase.Idle) {
+                    Timber.tag(TAG).w("Theme animation is not idle, skipping toggle")
+                    return
+                }
+                val newMode = themeProvider.theme != ThemeProvider.Theme.DARK
+                onChangeThemeMode()
+            }
         }
+    }
+
+    fun updateButtonPosition(position: Offset) {
+        Timber.tag(TAG).d("Updating button position to: $position")
+        themeProvider.buttonThemePosition = position
     }
 
     private fun onLoadDailyLiturgy(isRefreshing: Boolean, period: String? = null) = safeLaunch {
@@ -77,18 +96,14 @@ class HomeViewModel @Inject constructor(
                     )
                 )
             )
-        }.catch {
-            Timber.tag(TAG).e(it, "Error loading daily liturgy")
-            setState(BaseViewState.Error(it))
+        }.catch { exception ->
+            Timber.tag(TAG).e(exception, "Error loading daily liturgy")
+            handleError(exception)
         }.launchIn(viewModelScope)
     }
 
-    private fun onChangeThemeMode(isDarkMode: Boolean) {
-        themeProvider.theme = if (isDarkMode) {
-            ThemeProvider.Theme.DARK
-        } else {
-            ThemeProvider.Theme.LIGHT
-        }
+    private fun onChangeThemeMode() {
+        themeProvider.themeAnimationPhase = ThemeAnimationPhase.Expanding
     }
 
     companion object {

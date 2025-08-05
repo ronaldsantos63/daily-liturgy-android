@@ -38,6 +38,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -64,6 +66,7 @@ import com.ronaldsantos.catholicliturgy.provider.navigation.NavigationProvider
 import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Destination(start = true)
 @Composable
@@ -84,7 +87,21 @@ fun HomeScreen(
         modifier = modifier.fillMaxSize(),
         topBar = {
             CLToolbar(R.string.toolbar_home_title, elevation = 0.dp, actions = {
-                IconButton(onClick = { viewModel.onTriggerEvent(HomeEvent.ThemeMode(!isDarkMode)) }) {
+                IconButton(
+                    onClick = {
+                        Timber.d("Theme button clicked")
+                        viewModel.onTriggerEvent(HomeEvent.ToggleThemeMode)
+                    },
+                    modifier = Modifier.onGloballyPositioned { coordinates ->
+                        val position = coordinates.localToWindow(Offset.Zero)
+                        viewModel.updateButtonPosition(
+                            Offset(
+                                x = position.x + coordinates.size.width / 2,
+                                y = position.y + coordinates.size.height / 2,
+                            )
+                        )
+                    }
+                ) {
                     val iconResId = if (isDarkMode) {
                         R.drawable.ic_moon
                     } else {
@@ -163,10 +180,11 @@ fun HomeContent(
                                 pagerState.animateScrollToPage(pageIndex)
                             }
                         },
+                        modifier = Modifier.weight(1f), // Distribui o espaço igualmente entre as abas
                         text = {
                             Text(
                                 text = stringResource(id = stringResourceId),
-                                style = CatholicLiturgyTypography.headlineMedium
+                                style = CatholicLiturgyTypography.headlineMedium,
                             )
                         }
                     )

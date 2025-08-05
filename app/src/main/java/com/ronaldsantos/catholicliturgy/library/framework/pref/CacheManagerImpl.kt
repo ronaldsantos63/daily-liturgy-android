@@ -9,8 +9,8 @@ import com.ronaldsantos.catholicliturgy.library.framework.extension.toJson
 import timber.log.Timber
 
 class CacheManagerImpl(
-    private val context: Context,
-    private val prefFileName: String? = null,
+    context: Context,
+    prefFileName: String? = null,
 ): CacheManager {
     private val prefs: SharedPreferences = context.getPrefs(
         prefFileName ?: context.getDefaultSharedPrefName()

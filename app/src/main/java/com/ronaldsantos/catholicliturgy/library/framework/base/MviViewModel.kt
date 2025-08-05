@@ -22,6 +22,17 @@ abstract class MviViewModel<STATE : BaseViewState<*>, EVENT> : MvvmViewModel() {
 
     override fun handleError(exception: Throwable) {
         super.handleError(exception)
-        _uiState.value = BaseViewState.Error(exception)
+        val errorMessage = when (exception) {
+            is java.net.UnknownHostException -> "Não foi possível conectar ao servidor. Verifique sua conexão com a internet."
+            is java.net.SocketTimeoutException -> "A conexão com o servidor expirou. Tente novamente mais tarde."
+            is retrofit2.HttpException -> {
+                when (exception.code()) {
+                    in 500..599 -> "${exception.code()} - O servidor está temporariamente indisponível. Tente novamente mais tarde."
+                    else -> "${exception.code()} - Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente."
+                }
+            }
+            else -> "Ocorreu um erro inesperado. Por favor, tente novamente."
+        }
+        _uiState.value = BaseViewState.Error(Throwable(errorMessage, cause = exception))
     }
 }

@@ -5,15 +5,11 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.presentation.main.MainActivity
 import com.ronaldsantos.catholicliturgy.presentation.welcome.WelcomeActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,14 +23,16 @@ class SplashActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val splashScreen = installSplashScreen()
-            splashScreen.setKeepOnScreenCondition { true }
+            installSplashScreen()
         }
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         lifecycleScope.launch {
             lifecycle.repeatOnLifecycle(Lifecycle.State.CREATED) {
                 viewModel.startWelcome.collectLatest {
-                    delay(3000)
+                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.S) {
+                        delay(3000)
+                    }
                     if (it) navigateWelcomeActivity() else navigateMainActivity()
                 }
             }

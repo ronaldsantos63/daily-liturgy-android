@@ -1,18 +1,19 @@
 package com.ronaldsantos.catholicliturgy.provider.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.async
+import androidx.compose.ui.geometry.Offset
+import com.ronaldsantos.catholicliturgy.app.theme.ThemeAnimationPhase
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.singleOrNull
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.launch
 import timber.log.Timber
 
 interface ThemeProvider {
     var theme: Theme
+    var themeAnimationPhase: ThemeAnimationPhase
+    var buttonThemePosition: Offset
+
+    fun observeThemeAnimationPhase(): Flow<ThemeAnimationPhase>
+    fun observeButtonThemePosition(): Flow<Offset>
     fun observeTheme(): Flow<Theme>
 
     enum class Theme {
@@ -24,6 +25,8 @@ interface ThemeProvider {
     fun isNightMode(): Boolean
 
     fun setNightMode(forceNight: Boolean)
+
+    fun isSystemInDarkTheme(): Boolean
 }
 
 @Composable
@@ -35,10 +38,6 @@ fun ThemeProvider.shouldUseDarkMode(): Boolean {
         ThemeProvider.Theme.LIGHT -> false
         ThemeProvider.Theme.DARK -> true
         else -> isSystemInDarkTheme()
-    }
-    val currentMode = isNightMode()
-    if (currentMode != mode) {
-        setNightMode(mode)
     }
     return mode
 }

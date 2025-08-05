@@ -2,8 +2,10 @@ package com.ronaldsantos.catholicliturgy.provider.theme
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.ui.geometry.Offset
 import androidx.core.content.edit
 import com.ronaldsantos.catholicliturgy.R
+import com.ronaldsantos.catholicliturgy.app.theme.ThemeAnimationPhase
 import com.ronaldsantos.catholicliturgy.library.framework.extension.getPrefs
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -21,6 +23,8 @@ class AppThemeProvider(
     private val defaultThemeValue = context.getString(R.string.pref_theme_default_value)
 
     private val preferenceKeyChangedFlow = MutableSharedFlow<String>(extraBufferCapacity = 1)
+    private val themeAnimationPhaseFlow = MutableSharedFlow<ThemeAnimationPhase>(extraBufferCapacity = 1)
+    private val buttonThemePositionFlow = MutableSharedFlow<Offset>(extraBufferCapacity = 1)
 
     private val listener = SharedPreferences.OnSharedPreferenceChangeListener { _, key ->
         if (key != null) {
@@ -29,6 +33,8 @@ class AppThemeProvider(
     }
 
     private var currentTheme: ThemeProvider.Theme? = null
+    private var _themeAnimationPhase: ThemeAnimationPhase = ThemeAnimationPhase.Idle
+    private var _buttonThemePosition: Offset = Offset.Zero
 
     companion object {
         const val KEY_THEME = "pref_theme"
@@ -62,13 +68,48 @@ class AppThemeProvider(
             }
         }
 
+    override var themeAnimationPhase: ThemeAnimationPhase
+        get() {
+            Timber.tag(TAG).d("Getting theme animation phase: $_themeAnimationPhase")
+            return _themeAnimationPhase
+        }
+        set(value) {
+            Timber.tag(TAG).d("Setting theme animation phase to: $value")
+            _themeAnimationPhase = value
+            themeAnimationPhaseFlow.tryEmit(value)
+        }
+
+    override var buttonThemePosition: Offset
+        get() {
+            Timber.tag(TAG).d("Getting button theme position")
+            return _buttonThemePosition
+        }
+        set(value) {
+            Timber.tag(TAG).d("Setting button theme position to: $value")
+            _buttonThemePosition = value
+            buttonThemePositionFlow.tryEmit(value)
+        }
+
+    override fun observeThemeAnimationPhase(): Flow<ThemeAnimationPhase> {
+        return themeAnimationPhaseFlow
+            .distinctUntilChanged()
+            .onStart {
+                Timber.tag(TAG).d("Emitting initial theme animation phase: $_themeAnimationPhase")
+                emit(_themeAnimationPhase)
+            }
+    }
+
+    override fun observeButtonThemePosition(): Flow<Offset> {
+        return buttonThemePositionFlow
+            .distinctUntilChanged()
+            .onStart {
+                Timber.tag(TAG).d("Emitting initial button theme position: $_buttonThemePosition")
+                emit(_buttonThemePosition)
+            }
+    }
+
     override fun observeTheme(): Flow<ThemeProvider.Theme> {
         return preferenceKeyChangedFlow
-            // Emit on start so that we always send the initial value
-//            .onStart {
-//                Timber.tag(TAG).d("Emitting initial theme value")
-//                emit(KEY_THEME)
-//            }
             .filter {
                 Timber.tag(TAG).d("Filtering preference key: $it")
                 it == KEY_THEME
@@ -79,7 +120,6 @@ class AppThemeProvider(
             }
             .distinctUntilChanged()
             .onStart {
-                // Emitir apenas se necessário
                 val initialTheme = theme
                 Timber.tag(TAG).d("Emitting initial theme value: ${initialTheme.storageKey}")
                 emit(initialTheme)
@@ -88,9 +128,22 @@ class AppThemeProvider(
 
     override fun isNightMode(): Boolean {
         Timber.tag(TAG).d("Checking if night mode is enabled")
-        val isNightMode = theme == ThemeProvider.Theme.DARK
+        val isNightMode = when (theme) {
+            ThemeProvider.Theme.LIGHT -> false
+            ThemeProvider.Theme.DARK -> true
+            ThemeProvider.Theme.SYSTEM -> isSystemInDarkTheme()
+        }
         Timber.tag(TAG).d("Is night mode: $isNightMode")
         return isNightMode
+    }
+
+    override fun isSystemInDarkTheme(): Boolean {
+        Timber.tag(TAG).d("Checking if system is in dark theme")
+        val isSystemInDark = context.resources.configuration.uiMode and
+                android.content.res.Configuration.UI_MODE_NIGHT_MASK ==
+                android.content.res.Configuration.UI_MODE_NIGHT_YES
+        Timber.tag(TAG).d("Is system in dark theme: $isSystemInDark")
+        return isSystemInDark
     }
 
     private val ThemeProvider.Theme.storageKey: String
