@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import com.ronaldsantos.catholicliturgy.R
-import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
 import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBR
 import java.util.Calendar
 
@@ -68,13 +67,6 @@ fun DatePickerDialogWrapper(
         DatePicker(
             state = datePickerState,
             dateFormatter = dateFormatter,
-            colors = DatePickerDefaults.colors(
-                selectedDayContainerColor = CatholicLiturgyColors.onSurfaceVariant, // Cor de fundo do dia selecionado
-                selectedDayContentColor = CatholicLiturgyColors.primary, // Cor do texto do dia selecionado
-                disabledDayContentColor =  CatholicLiturgyColors.onPrimary.copy(alpha = 0.38f), // Cor do texto dos dias desabilitados
-                todayDateBorderColor = CatholicLiturgyColors.onPrimary, // Cor da borda do dia atual
-                todayContentColor = CatholicLiturgyColors.onSecondary,
-            ),
         )
     }
 }

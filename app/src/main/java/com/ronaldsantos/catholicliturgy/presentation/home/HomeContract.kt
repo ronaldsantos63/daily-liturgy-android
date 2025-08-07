@@ -16,4 +16,5 @@ sealed class HomeEvent {
 
     data object RetryLoadDailyLiturgy : HomeEvent()
     data object ToggleThemeMode : HomeEvent()
+    data class ReadAloud(val viewState: HomeViewState) : HomeEvent()
 }

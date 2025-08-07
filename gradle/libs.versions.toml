@@ -1,5 +1,5 @@
 [versions]
-agp = "8.11.1"
+agp = "8.12.0"
 kotlin = "1.9.22"
 coreKtx = "1.13.1"
 coreSplashscreen = "1.0.1"
@@ -44,6 +44,7 @@ activity = "1.9.0"
 lifecycleCommonJvm = "2.8.0"
 lottie = "5.0.3"
 composeNavDestination = "1.4.4-beta"
+composeRichText = "0.20.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -153,6 +154,10 @@ androidx-media3-session = { group = "androidx.media3", name = "media3-session", 
 
 # Markdown
 composeMarkdown = { group = "com.github.jeziellago", name = "compose-markdown", version.ref = "composeMarkdown" }
+composeRichTextUi = { group = "com.halilibo.compose-richtext", name = "richtext-ui", version.ref = "composeRichText" }
+composeRichTextMarkdown = { group = "com.halilibo.compose-richtext", name = "richtext-markdown", version.ref = "composeRichText" }
+composeRichTextCommonMark = { group = "com.halilibo.compose-richtext", name = "richtext-commonmark", version.ref = "composeRichText" }
+composeRichTextUiMaterial3 = { group = "com.halilibo.compose-richtext", name = "richtext-ui-material3", version.ref = "composeRichText" }
 
 # Logger
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }

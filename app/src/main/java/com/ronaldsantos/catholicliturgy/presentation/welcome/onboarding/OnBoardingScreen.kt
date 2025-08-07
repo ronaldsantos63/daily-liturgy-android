@@ -1,16 +1,20 @@
 package com.ronaldsantos.catholicliturgy.presentation.welcome.onboarding
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
@@ -20,7 +24,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -32,10 +35,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.app.component.pager.HorizontalPagerIndicator
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
+import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyShapes
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTheme
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTypography
-import com.ronaldsantos.catholicliturgy.app.theme.Red700
-import com.ronaldsantos.catholicliturgy.app.theme.White
 import com.ronaldsantos.catholicliturgy.library.framework.extension.launchActivity
 import com.ronaldsantos.catholicliturgy.presentation.main.MainActivity
 
@@ -56,7 +58,6 @@ fun OnBoardingScreen(viewModel: OnBoardingViewModel = hiltViewModel()) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(CatholicLiturgyColors.primary)
     ) {
         HorizontalPager(
             modifier = Modifier.weight(10f),
@@ -71,14 +72,15 @@ fun OnBoardingScreen(viewModel: OnBoardingViewModel = hiltViewModel()) {
                 .weight(1f),
             pagerState = pagerState,
             pageCount = pages.count(),
-            activeColor = Red700
         )
         FinishButton(
             modifier = Modifier.weight(1f),
             pagerState = pagerState
         ) {
             viewModel.saveOnBoardingState(completed = true)
-            context.launchActivity<MainActivity> { }
+            context.launchActivity<MainActivity> {
+                addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
         }
     }
 }
@@ -128,7 +130,10 @@ fun FinishButton(
 ) {
     Row(
         modifier = modifier
-            .padding(horizontal = 40.dp),
+            .padding(horizontal = 40.dp)
+            .padding(
+                bottom = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+            ),
         verticalAlignment = Alignment.Top,
         horizontalArrangement = Arrangement.Center
     ) {
@@ -137,15 +142,16 @@ fun FinishButton(
             visible = pagerState.currentPage == 2
         ) {
             Button(
+                modifier = Modifier.fillMaxSize().wrapContentHeight(),
                 onClick = onClick,
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = Red700
+                    containerColor = CatholicLiturgyColors.primary,
+                    contentColor = CatholicLiturgyColors.onPrimary
                 ),
-                shape = RectangleShape
+                shape = CatholicLiturgyShapes.small
             ) {
                 Text(
                     text = stringResource(id = R.string.text_finish),
-                    color = White,
                     modifier = Modifier.padding(4.dp)
                 )
             }

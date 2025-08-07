@@ -1,5 +1,7 @@
 package com.ronaldsantos.catholicliturgy.presentation.home
 
+import android.content.Context
+import android.speech.tts.TextToSpeech
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -12,6 +14,7 @@ import com.ronaldsantos.catholicliturgy.library.framework.base.MviViewModel
 import com.ronaldsantos.catholicliturgy.library.framework.extension.asDateStringBR
 import com.ronaldsantos.catholicliturgy.provider.theme.ThemeProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -21,13 +24,16 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import timber.log.Timber
 import java.util.Calendar
+import java.util.Locale
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val getCurrentDailyLiturgy: GetCurrentDailyLiturgy,
     private val themeProvider: ThemeProvider,
+    @ApplicationContext private val appContext: Context,
 ) : MviViewModel<BaseViewState<HomeViewState>, HomeEvent>() {
+    private var textToSpeech: TextToSpeech? = null
     private var lastPeriodSearched by mutableStateOf("")
 
     val isDarkMode: StateFlow<Boolean>
@@ -60,6 +66,25 @@ class HomeViewModel @Inject constructor(
                     return
                 }
                 onChangeThemeMode()
+            }
+
+            is HomeEvent.ReadAloud -> {
+                Timber.tag(TAG).d("Read Aloud event triggered")
+                if (textToSpeech == null) {
+                    Timber.tag(TAG).d("Initializing TextToSpeech")
+                    textToSpeech = TextToSpeech(appContext) { status ->
+                        if (status == TextToSpeech.SUCCESS) {
+                            Timber.tag(TAG).d("TextToSpeech initialized successfully")
+                            textToSpeech?.language = Locale("pt", "BR")
+                            speakText(eventType.viewState)
+                        } else {
+                            Timber.tag(TAG).e("Failed to initialize TextToSpeech")
+                        }
+                    }
+                } else {
+                    Timber.tag(TAG).d("TextToSpeech already initialized")
+                    speakText(eventType.viewState)
+                }
             }
         }
     }
@@ -103,6 +128,15 @@ class HomeViewModel @Inject constructor(
 
     private fun onChangeThemeMode() {
         themeProvider.themeAnimationPhase = ThemeAnimationPhase.Expanding
+    }
+
+    private fun speakText(viewState: HomeViewState) {
+        val text = viewState
+            .dailyLiturgy
+            .readings
+            .joinToString(separator = "\n") { android.text.Html.fromHtml(it.text, android.text.Html.FROM_HTML_MODE_LEGACY).toString() }
+
+        textToSpeech?.speak(text, TextToSpeech.QUEUE_FLUSH, null, "liturgia-id")
     }
 
     companion object {

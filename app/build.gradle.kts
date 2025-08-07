@@ -145,7 +145,11 @@ dependencies {
     kapt(libs.com.google.dagger.hilt.compiler)
 
     // Compose Markdown
-    implementation(libs.composeMarkdown)
+//    implementation(libs.composeMarkdown)
+//    implementation(libs.composeRichTextUi)
+//    implementation(libs.composeRichTextMarkdown)
+    implementation(libs.composeRichTextUiMaterial3)
+    implementation(libs.composeRichTextCommonMark)
 
     // Firebase
     implementation(platform(libs.com.google.firebase.bom))

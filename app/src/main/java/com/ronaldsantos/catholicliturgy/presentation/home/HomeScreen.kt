@@ -1,6 +1,7 @@
 package com.ronaldsantos.catholicliturgy.presentation.home
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -13,24 +14,24 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
 import androidx.compose.material3.TabRowDefaults.SecondaryIndicator
 import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -42,7 +43,11 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.SwipeRefreshIndicator
@@ -50,10 +55,10 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.app.component.DatePickerDialogWrapper
+import com.ronaldsantos.catholicliturgy.app.component.MarkdownContent
 import com.ronaldsantos.catholicliturgy.app.component.SmallSpacer
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTypography
-import com.ronaldsantos.catholicliturgy.app.theme.RedDark
 import com.ronaldsantos.catholicliturgy.app.widget.CLToolbar
 import com.ronaldsantos.catholicliturgy.app.widget.EmptyView
 import com.ronaldsantos.catholicliturgy.app.widget.ErrorView
@@ -63,7 +68,6 @@ import com.ronaldsantos.catholicliturgy.domain.model.ReadingsDto
 import com.ronaldsantos.catholicliturgy.library.framework.base.BaseViewState
 import com.ronaldsantos.catholicliturgy.library.framework.extension.cast
 import com.ronaldsantos.catholicliturgy.provider.navigation.NavigationProvider
-import dev.jeziellago.compose.markdowntext.MarkdownText
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -85,7 +89,9 @@ fun HomeScreen(
     }
 
     Scaffold(
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .background(CatholicLiturgyColors.background),
         topBar = {
             CLToolbar(R.string.toolbar_home_title, elevation = 0.dp, actions = {
                 IconButton(
@@ -108,7 +114,10 @@ fun HomeScreen(
                     } else {
                         R.drawable.ic_sun
                     }
-                    Icon(painter = painterResource(id = iconResId), contentDescription = null)
+                    Icon(
+                        painter = painterResource(id = iconResId),
+                        contentDescription = stringResource(R.string.description_toggle_theme)
+                    )
                 }
             })
         },
@@ -136,12 +145,29 @@ fun HomeContent(
     viewState: HomeViewState,
     coroutineScope: CoroutineScope,
 ) {
-    val tabsName by rememberSaveable {
-        mutableStateOf(viewState.tabs.map { it.value })
-    }
+    val tabToReadingType = mapOf(
+        HomeTabs.FirstReading.value to ReadingTypeDto.FirstReading,
+        HomeTabs.Psalm.value to ReadingTypeDto.Psalm,
+        HomeTabs.SecondReading.value to ReadingTypeDto.SecondaryReading,
+        HomeTabs.Gospel.value to ReadingTypeDto.Gospel,
+    )
 
-    val pagerState = rememberPagerState {
-        tabsName.size
+    val tabsName = viewState.tabs.map { it.value }
+
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        pageCount = { tabsName.size }
+    )
+
+    val minFontSize = 12f
+    val maxFontSize = 32f
+    val defaultFontSize = 18f
+//    var fontSize by rememberSaveable { mutableFloatStateOf(defaultFontSize) }
+    var sliderValue by rememberSaveable { mutableFloatStateOf(18f) }
+    val fontSize = sliderValue.toInt().sp
+
+    LaunchedEffect(viewState.dailyLiturgy.liturgyDate) {
+        pagerState.scrollToPage(0)
     }
 
     SwipeRefresh(
@@ -154,70 +180,82 @@ fun HomeContent(
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             LiturgyHeader(viewState, viewModel)
-            TabRow(
-                selectedTabIndex = pagerState.currentPage,
-                containerColor = CatholicLiturgyColors.primary,
-                indicator = { tabPositions ->
-                    SecondaryIndicator(
-                        modifier = Modifier
-                            .tabIndicatorOffset(tabPositions[pagerState.currentPage]),
-                        color = RedDark
-                    )
-                }
-            ) {
-                tabsName.forEachIndexed { index, stringResourceId ->
-                    Tab(
-                        selected = index == pagerState.currentPage,
-                        onClick = {
-                            val pageIndex = when (stringResourceId) {
-                                HomeTabs.FirstReading.value -> tabsName.indexOf(HomeTabs.FirstReading.value)
-                                HomeTabs.Psalm.value -> tabsName.indexOf(HomeTabs.Psalm.value)
-                                HomeTabs.SecondReading.value -> tabsName.indexOf(HomeTabs.SecondReading.value)
-                                HomeTabs.Gospel.value -> tabsName.indexOf(HomeTabs.Gospel.value)
-                                else -> 0
+//            Row(
+//                modifier = Modifier
+//                    .fillMaxWidth()
+//                    .padding(horizontal = 16.dp, vertical = 8.dp),
+//                horizontalArrangement = Arrangement.SpaceBetween,
+//                verticalAlignment = Alignment.CenterVertically
+//            ) {
+//                Column(modifier = Modifier.fillMaxWidth()) {
+//                    Text(
+//                        text = "Tamanho da fonte: ${sliderValue.toInt()}sp",
+//                        style = CatholicLiturgyTypography.labelLarge
+//                    )
+//                    Slider(
+//                        value = sliderValue,
+//                        onValueChange = {
+//                            sliderValue = it
+////                            fontSize = it.sp
+//                        },
+//                        valueRange = minFontSize..maxFontSize,
+//                        steps = 10
+//                    )
+//                }
+//
+//                TextButton(onClick = {
+//                    viewModel.onTriggerEvent(HomeEvent.ReadAloud(viewState))
+//                }) {
+//                    Icon(
+//                        Icons.AutoMirrored.Filled.VolumeUp,
+//                        contentDescription = "Ler texto"
+//                    )
+//                }
+//            }
+            if (tabsName.isNotEmpty()) {
+                ScrollableTabRow(
+                    selectedTabIndex = pagerState.currentPage,
+                    edgePadding = 16.dp,
+                    indicator = { tabPositions ->
+                        SecondaryIndicator(
+                            modifier = Modifier.tabIndicatorOffset(tabPositions[pagerState.currentPage])
+                        )
+                    }
+                ) {
+                    tabsName.forEachIndexed { index, stringResourceId ->
+                        Tab(
+                            selected = index == pagerState.currentPage,
+                            onClick = {
+                                val pageIndex = when (stringResourceId) {
+                                    HomeTabs.FirstReading.value -> tabsName.indexOf(HomeTabs.FirstReading.value)
+                                    HomeTabs.Psalm.value -> tabsName.indexOf(HomeTabs.Psalm.value)
+                                    HomeTabs.SecondReading.value -> tabsName.indexOf(HomeTabs.SecondReading.value)
+                                    HomeTabs.Gospel.value -> tabsName.indexOf(HomeTabs.Gospel.value)
+                                    else -> 0
+                                }
+                                coroutineScope.launch {
+                                    pagerState.animateScrollToPage(pageIndex)
+                                }
+                            },
+                            text = {
+                                Text(
+                                    text = stringResource(id = stringResourceId),
+                                    style = CatholicLiturgyTypography.titleMedium.copy(fontSize = 18.sp),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
+                                    softWrap = false
+                                )
                             }
-                            coroutineScope.launch {
-                                pagerState.animateScrollToPage(pageIndex)
-                            }
-                        },
-                        modifier = Modifier.weight(1f), // Distribui o espaço igualmente entre as abas
-                        text = {
-                            Text(
-                                text = stringResource(id = stringResourceId),
-                                style = CatholicLiturgyTypography.headlineMedium,
-                            )
-                        }
-                    )
+                        )
+                    }
                 }
-            }
-            HorizontalPager(
-                state = pagerState,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                when (pagerState.currentPage) {
-                    tabsName.indexOf(HomeTabs.FirstReading.value) -> {
-                        val reading =
-                            viewState.dailyLiturgy.readings.firstOrNull { it.type == ReadingTypeDto.FirstReading }
-                        ReadingContent(reading)
-                    }
-
-                    tabsName.indexOf(HomeTabs.Psalm.value) -> {
-                        val reading =
-                            viewState.dailyLiturgy.readings.firstOrNull { it.type == ReadingTypeDto.Psalm }
-                        ReadingContent(reading)
-                    }
-
-                    tabsName.indexOf(HomeTabs.SecondReading.value) -> {
-                        val reading =
-                            viewState.dailyLiturgy.readings.firstOrNull { it.type == ReadingTypeDto.SecondaryReading }
-                        ReadingContent(reading)
-                    }
-
-                    tabsName.indexOf(HomeTabs.Gospel.value) -> {
-                        val reading =
-                            viewState.dailyLiturgy.readings.firstOrNull { it.type == ReadingTypeDto.Gospel }
-                        ReadingContent(reading)
-                    }
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    val readingType = tabToReadingType[tabsName.getOrNull(pagerState.currentPage)]
+                    val reading = viewState.dailyLiturgy.readings.firstOrNull { it.type == readingType }
+                    ReadingContent(reading, fontSize)
                 }
             }
         }
@@ -233,13 +271,13 @@ private fun LiturgyHeader(
         mutableStateOf(false)
     }
 
-    Surface(
-        color = MaterialTheme.colorScheme.primary
-    ) {
+    Surface {
         Column(modifier = Modifier.padding(horizontal = 16.dp)) {
             Text(
                 text = viewState.dailyLiturgy.entryTitle,
-                style = CatholicLiturgyTypography.bodyMedium
+                style = CatholicLiturgyTypography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold
+                )
             )
             SmallSpacer()
             Row(
@@ -250,16 +288,15 @@ private fun LiturgyHeader(
             ) {
                 Text(
                     text = "Cor litúrgica: ${viewState.dailyLiturgy.color}",
-                    style = CatholicLiturgyTypography.labelMedium
+                    style = CatholicLiturgyTypography.labelLarge
                 )
-                Button(
+                TextButton(
                     onClick = { showDatePicker = true },
-                    colors = ButtonDefaults.textButtonColors(contentColor = CatholicLiturgyColors.onPrimary),
                 ) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = viewState.dailyLiturgy.liturgyDate,
-                            style = CatholicLiturgyTypography.labelMedium
+                            style = CatholicLiturgyTypography.labelLarge,
                         )
                         Spacer(modifier = Modifier.width(4.dp))
                         Icon(imageVector = Icons.Filled.CalendarMonth, contentDescription = null)
@@ -279,15 +316,17 @@ private fun LiturgyHeader(
 }
 
 @Composable
-private fun ReadingContent(reading: ReadingsDto?) {
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = 4.dp, start = 16.dp, end = 16.dp, bottom = 4.dp)
-    ) {
-        item {
-            reading?.let {
-                MarkdownText(markdown = it.text)
+private fun ReadingContent(reading: ReadingsDto?, fontSize: TextUnit) {
+    SelectionContainer {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 4.dp, start = 16.dp, end = 16.dp, bottom = 4.dp)
+        ) {
+            item {
+                reading?.let {
+                    MarkdownContent(it.text, fontSize)
+                }
             }
         }
     }

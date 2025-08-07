@@ -25,10 +25,10 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import com.ronaldsantos.catholicliturgy.app.component.SetupSystemUi
 import com.ronaldsantos.catholicliturgy.app.theme.BackgroundDark
-import com.ronaldsantos.catholicliturgy.app.theme.BackgroundLight
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyColors
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTheme
 import com.ronaldsantos.catholicliturgy.app.theme.ThemeAnimationPhase
+import com.ronaldsantos.catholicliturgy.app.theme.WhiteBG
 import com.ronaldsantos.catholicliturgy.presentation.home.NavGraphs
 import com.ronaldsantos.catholicliturgy.provider.navigation.AppNavigationProvider
 import com.ronaldsantos.catholicliturgy.provider.theme.shouldUseDarkMode
@@ -76,7 +76,7 @@ fun MainRoot(viewModel: MainViewModel = hiltViewModel(), finish: () -> Unit) {
     )
 
     // Cor do fundo com base no tema anterior
-    val backgroundColor = if (isDarkMode) BackgroundLight else BackgroundDark
+    val backgroundColor = if (isDarkMode) WhiteBG else BackgroundDark
 
     LaunchedEffect(animationPhase) {
         Timber.tag("MainRoot").d("Animation phase changed: $animationPhase")

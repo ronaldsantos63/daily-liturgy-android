@@ -31,4 +31,6 @@
     <string name="second_onboarding_description">Além das leituras, você pode acessar os salmos</string>
     <string name="third_onboarding_title">Evangelho</string>
     <string name="third_onboarding_description">Tudo em um único lugar, incluindo o evangelho do dia</string>
+
+    <string name="description_toggle_theme">Alternar entre modo claro e escuro</string>
 </resources>

@@ -10,7 +10,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ErrorOutline
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,6 +20,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import com.ronaldsantos.catholicliturgy.R
 import com.ronaldsantos.catholicliturgy.app.component.SmallSpacer
+import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyShapes
 import com.ronaldsantos.catholicliturgy.app.theme.CatholicLiturgyTheme
 import com.ronaldsantos.catholicliturgy.app.theme.Red
 
@@ -55,7 +55,7 @@ fun ErrorView(modifier: Modifier = Modifier, e: Throwable, action: () -> Unit) {
             modifier = modifier
                 .fillMaxWidth()
                 .wrapContentSize(Alignment.Center),
-            shape = MaterialTheme.shapes.small,
+            shape = CatholicLiturgyShapes.small,
             onClick = action
         ) {
             Text(text = stringResource(id = R.string.text_retry))

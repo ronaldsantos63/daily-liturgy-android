@@ -40,5 +40,7 @@
     <string name="third_onboarding_title">Gospel</string>
     <string name="third_onboarding_description">Everything in one place, including the gospel of the day</string>
 
+    <string name="description_toggle_theme">switch between light and dark mode</string>
+
 
 </resources>
